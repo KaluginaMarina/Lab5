@@ -1,23 +1,39 @@
-import com.sun.javafx.collections.MappingChange;
-import org.json.simple.JSONValue;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException,  IOException {
 
-        Map<Object, Object> map = new HashMap<>();
-        ArrayList<Map<Object, Object>> a = new ArrayList<>();
-        map.put("kek", 4);
-        map.put(3, 5);
-        a.add(map);
-        System.out.println(JSONValue.toJSONString(a));
-
         CollectionManage cm = new CollectionManage();
         cm.collectionCreater();
+
+        String man = cm.read("materials\\man.txt");
+        while(true){
+            Scanner input = new Scanner(System.in);
+            String command = input.next();
+            if (command.equals("remove_last")){
+                cm.removeLast();
+            } else if (command.equals("load")){
+                cm.collectionCreater();
+            } else if (command.equals("remove_greater")){
+                int arg = input.nextInt();
+            } else if (command.equals("add_if_max")){
+                int arg = input.nextInt();
+            } else if (command.equals("add_if_min")){
+                int arg = input.nextInt();
+            } else if (command.equals("add")){
+                int arg = input.nextInt();
+            } else if (command.equals("print")) {
+                System.out.println(cm.getHeroes());
+            } else if (command.equals("?") || command.equals("help")){
+                System.out.println(man);
+            } else if (command.equals("exit")){
+                break;
+            } else {
+                System.out.println("Команда не найдена.\nВведите help или ? для ознакомления  руководством.");
+            }
+
+        }
 
         System.out.println("\"Незнайка на Луне\"");
         Reader reader = new Reader("Читатель");

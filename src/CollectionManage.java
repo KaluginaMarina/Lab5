@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static java.lang.Math.toIntExact;
@@ -21,17 +20,21 @@ public class CollectionManage {
         return heroes;
     }
 
-    public String read(){
+    /**
+     * Метод для чтения текста из файла
+     * @return String heroesJson - строка-содержимое файла
+     */
+    public String read(String fileName){
         String heroesJson = "";
         try (FileInputStream fis = new FileInputStream(fileName);
-             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+             InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
              BufferedReader br = new BufferedReader(isr)
         )
         {
             String line;
 
             while ((line = br.readLine()) != null) {
-                heroesJson += line;
+                heroesJson += line + "\n";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +42,11 @@ public class CollectionManage {
         return heroesJson;
     }
 
+    /**
+     * Метод, создающий коллекцию Personage по данным из файла
+     */
     public void collectionCreater(){
-        String heroesJson = read();
+        String heroesJson = read(fileName);
         try {
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(heroesJson);
@@ -69,6 +75,9 @@ public class CollectionManage {
         }
     }
 
+    /**
+     * Метод, записывающий текущее состояние коллекции в файл
+     */
     public void collectionSave(){
         try (FileWriter file = new FileWriter(fileNameClosing, false)){
             file.write(toJson());
@@ -77,8 +86,11 @@ public class CollectionManage {
         }
     }
 
+    /**
+     * Метод, преобразующий текущую строку в строку, формата JSON
+     * @return String
+     */
     public String toJson(){
-        String res = "";
         ArrayList<Map<Object, Object>> a = new ArrayList<>();
         while (!heroes.isEmpty()){
             switch (heroes.getFirst().type){
@@ -88,6 +100,7 @@ public class CollectionManage {
                     map.put("name", heroes.getFirst().name);
                     map.put("height", heroes.getFirst().height);
                     map.put("force", heroes.getFirst().force);
+                    map.put("mood", heroes.getFirst().mood.toString());
                     a.add(map);
                     break;
                 }
@@ -101,6 +114,7 @@ public class CollectionManage {
                     map.put("height", heroes.getFirst().height);
                     map.put("skillSwear", heroes.getFirst().skillSwear);
                     map.put("force", heroes.getFirst().force);
+                    map.put("mood", heroes.getFirst().mood.toString());
                     a.add(map);
                     break;
                 }
@@ -111,5 +125,14 @@ public class CollectionManage {
             heroes.removeFirst();
         }
         return JSONValue.toJSONString(a);
+    }
+
+
+    /**
+     * Метод, для команды remove_last
+     * удаляет последний элемент
+     */
+    public void removeLast(){
+        heroes.removeLast();
     }
 }
