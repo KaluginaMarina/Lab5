@@ -1,12 +1,5 @@
 public class Shorties extends Personage{
-
     int skillSwear = 3;
-
-    String type = "Коротышка";
-    Shorties (String name){
-        this.name = name;
-        this.type = "Коротышка";
-    }
 
     Shorties (String name, double x, double y, int height){
         this.name = name;

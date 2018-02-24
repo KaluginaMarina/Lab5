@@ -1,5 +1,4 @@
 public class Moonlighter extends Personage {
-    String type = "Лунатик";
     int skillSwear = 10;
 
     class unchException extends RuntimeException{

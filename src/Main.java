@@ -1,40 +1,13 @@
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
 
 public class Main {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException,  IOException {
 
+        CollectionManage cm = new CollectionManage();
+        cm.collectionCreater();
+
         System.out.println("\"Незнайка на Луне\"");
         Reader reader = new Reader("Читатель");
-        String heroesJson = new String();
-
-        ArrayDeque<Personage> heroes = new ArrayDeque<>();
-        try (FileInputStream fis = new FileInputStream("materials\\Heroes.csv");
-             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-             BufferedReader br = new BufferedReader(isr)
-            )
-        {
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                heroesJson += line;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            JSONParser parser = new JSONParser();
-            JSONObject json = (JSONObject) parser.parse(heroesJson);
-            JSONObject address = (JSONObject) json.get("address");
-            System.out.println(address.get("city"));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
 
         Forest thisForest = new Forest();                                                    // Создаем лес
         Tree tree = new Tree("дерево", 20, 30, thisForest);
@@ -68,6 +41,5 @@ public class Main {
         reader.feel();                                                                 // Читатель почувствовал, что
         julio.compare(readerJulio);                                                    // Коротышка похож на Жулио
         migo.compare(readerMigo);                                                      // Коротышка похож на Миго
-
     }
 }
