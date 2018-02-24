@@ -8,13 +8,22 @@ public class Main {
         cm.collectionCreater();
 
         String man = cm.read("materials\\man.txt");
+        System.out.println("help / ?: открыть справку");
+
         while(true){
+            System.out.println("Введите команду: ");
             Scanner input = new Scanner(System.in);
             String command = input.next();
+
             if (command.equals("remove_last")){
                 cm.removeLast();
-            } else if (command.equals("load")){
+            } else if (command.equals("load")) {
                 cm.collectionCreater();
+            } else if (command.equals("info")){
+                System.out.println("Тип коллекции: " + cm.getHeroes().getClass());
+                System.out.println("Количество элементов в коллекци: " + cm.getHeroes().size());
+                System.out.println("Время создания: " + cm.getCreateDate());
+                System.out.println("Время изменения: " + cm.getChangeDate());
             } else if (command.equals("remove_greater")){
                 int arg = input.nextInt();
             } else if (command.equals("add_if_max")){
@@ -22,7 +31,7 @@ public class Main {
             } else if (command.equals("add_if_min")){
                 int arg = input.nextInt();
             } else if (command.equals("add")){
-                int arg = input.nextInt();
+                cm.add();
             } else if (command.equals("print")) {
                 System.out.println(cm.getHeroes());
             } else if (command.equals("?") || command.equals("help")){
@@ -30,7 +39,7 @@ public class Main {
             } else if (command.equals("exit")){
                 break;
             } else {
-                System.out.println("Команда не найдена.\nВведите help или ? для ознакомления  руководством.");
+                System.out.println("Команда не найдена.\nhelp / ?: открыть справку");
             }
 
         }
