@@ -1,7 +1,20 @@
+import com.sun.javafx.collections.MappingChange;
+import org.json.simple.JSONValue;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException,  IOException {
+
+        Map<Object, Object> map = new HashMap<>();
+        ArrayList<Map<Object, Object>> a = new ArrayList<>();
+        map.put("kek", 4);
+        map.put(3, 5);
+        a.add(map);
+        System.out.println(JSONValue.toJSONString(a));
 
         CollectionManage cm = new CollectionManage();
         cm.collectionCreater();
@@ -41,5 +54,7 @@ public class Main {
         reader.feel();                                                                 // Читатель почувствовал, что
         julio.compare(readerJulio);                                                    // Коротышка похож на Жулио
         migo.compare(readerMigo);                                                      // Коротышка похож на Миго
+
+        cm.collectionSave();
     }
 }

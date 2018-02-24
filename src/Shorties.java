@@ -1,5 +1,4 @@
 public class Shorties extends Personage{
-    int skillSwear = 3;
 
     Shorties (String name, double x, double y, int height){
         this.name = name;
@@ -8,6 +7,7 @@ public class Shorties extends Personage{
         this.y = y;
         this.force = 5;
         this.height = height;
+        this.skillSwear = 3;
     }
 
     /**

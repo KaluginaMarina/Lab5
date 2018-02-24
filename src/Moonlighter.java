@@ -1,5 +1,8 @@
+import jdk.nashorn.api.scripting.JSObject;
+import jdk.nashorn.internal.runtime.JSONFunctions;
+import org.json.simple.JSONValue;
+
 public class Moonlighter extends Personage {
-    int skillSwear = 10;
 
     class unchException extends RuntimeException{
         unchException(String msg){
@@ -14,6 +17,7 @@ public class Moonlighter extends Personage {
         this.y =y;
         this.force = 7;
         this.height = height;
+        this.skillSwear = 10;
     }
 
     /**

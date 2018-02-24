@@ -3,7 +3,7 @@ public abstract class Personage {
     String type = "Персонаж";
     double x = 0;
     double y = 0;
-    int skillSwear = 10;
+    int skillSwear;
     int force;
     int height;
     Mood mood = Mood.NORMAL;
@@ -63,4 +63,5 @@ public abstract class Personage {
     public void feel(){
         System.out.print(name + " почувствовал, что ");
     }
+
 }

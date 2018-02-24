@@ -6,7 +6,8 @@
 		"y": 100.0,
 		"height": 200,
 		"skillSwear": 10,
-		"force": 7
+		"force": 7,
+		"mood": "Mood.NORMAL"
 	},
 	{
 		"type": "Коротышка",
@@ -15,7 +16,8 @@
 		"y": 0.0,
 		"height": 100,
 		"skillSwear": 3,
-		"force": 5
+		"force": 5,
+		"mood": "Mood.NORMAL"
 	},
 	{
 		"type": "Коротышка",
@@ -24,7 +26,8 @@
 		"y": 10.0,
 		"height": 110,
 		"skillSwear": 3,
-		"force": 5
+		"force": 5,
+		"mood": "Mood.NORMAL"
 	},
 	{
 		"type": "Коротышка",
@@ -33,11 +36,14 @@
 		"y": 10.0,
 		"height": 115,
 		"skillSwear": 3,
-		"force": 5
+		"force": 5,
+		"mood": "Mood.NORMAL"
 	}
 	{
 		"type": "Читатель",
 		"name": "Читатель",
 		"height": 158,
+		"force" : 0,
+		"mood": "Mood.NORMAL"
 	}
 ]

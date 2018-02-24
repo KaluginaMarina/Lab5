@@ -1,18 +1,20 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
+import java.util.*;
 
 import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
     private ArrayDeque<Personage> heroes = new ArrayDeque<>();
     private final String fileName = "materials\\Heroes.csv";
-    private final String fileNameClosing = "materials\\HeroesClosing.svg";
+    private final String fileNameClosing = "materials\\HeroesClosing.csv";
 
 
     public ArrayDeque<Personage> getHeroes() {
@@ -67,4 +69,47 @@ public class CollectionManage {
         }
     }
 
+    public void collectionSave(){
+        try (FileWriter file = new FileWriter(fileNameClosing, false)){
+            file.write(toJson());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public String toJson(){
+        String res = "";
+        ArrayList<Map<Object, Object>> a = new ArrayList<>();
+        while (!heroes.isEmpty()){
+            switch (heroes.getFirst().type){
+                case "Читатель": {
+                    Map<Object, Object> map = new HashMap<>();
+                    map.put("type", heroes.getFirst().type);
+                    map.put("name", heroes.getFirst().name);
+                    map.put("height", heroes.getFirst().height);
+                    map.put("force", heroes.getFirst().force);
+                    a.add(map);
+                    break;
+                }
+                case "Коротышка" : {}
+                case "Лунатик" : {
+                    Map<Object, Object> map = new HashMap<>();
+                    map.put("type", heroes.getFirst().type);
+                    map.put("name", heroes.getFirst().name);
+                    map.put("x", heroes.getFirst().x);
+                    map.put("y", heroes.getFirst().y);
+                    map.put("height", heroes.getFirst().height);
+                    map.put("skillSwear", heroes.getFirst().skillSwear);
+                    map.put("force", heroes.getFirst().force);
+                    a.add(map);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+            heroes.removeFirst();
+        }
+        return JSONValue.toJSONString(a);
+    }
 }
