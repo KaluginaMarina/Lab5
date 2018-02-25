@@ -1,10 +1,15 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
+
+import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
     private ArrayDeque<Personage> heroes = new ArrayDeque<>();
@@ -139,50 +144,57 @@ public class CollectionManage {
         return changeDate;
     }
 
+    private String readPers(){
+        Scanner input = new Scanner(System.in);
+        String res = "";
+        String str = input.nextLine();
+       try{
+           while (!(str).equals("")){
+               res += str;
+               str = input.nextLine();
+           }
+       } catch (Exception e){
+           e.printStackTrace();
+           return null;
+       };
+        return res;
+    }
+
     /**
      * Метод для добавления элемента в коллекцию в интерактивном режиме
      */
     public boolean add() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Введите тип персонажа: ");
-        String type = input.next();
         try {
-            switch (type) {
+            String heroesJson = readPers();
+            if (heroesJson == null){
+                return false;
+            };
+            JSONParser parser = new JSONParser();
+            JSONObject ob = (JSONObject) parser.parse(heroesJson);
+            switch ((String)ob.get("type")) {
                 case "Читатель": {
-                    System.out.println("Введите имя персонажа: ");
-                    String name = input.next();
-                    heroes.add(new Reader(name));
-                    changeDate = new Date();
-                    return true;
-                }
-                case "Коротышка": {
+                    heroes.add(new Reader((String) ob.get("name")));
+                    break;
                 }
                 case "Лунатик": {
-                    System.out.println("Введите имя персонажа: ");
-                    String name = input.next();
-                    System.out.println("Введите координату x: ");
-                    double x = input.nextDouble();
-                    System.out.println("Введите координату у: ");
-                    double y = input.nextDouble();
-                    System.out.println("Укажите рост персонажа: ");
-                    int h = input.nextInt();
-                    if (type.equals("Лунатик")) {
-                        heroes.add(new Moonlighter(name, x, y, h));
-                    } else {
-                        heroes.add(new Shorties(name, x, y, h));
-                    }
-                    changeDate = new Date();
-                    return true;
+                    heroes.add(new Moonlighter((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
+                    break;
+                }
+                case "Коротышка": {
+                    heroes.add(new Shorties((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
+                    break;
                 }
                 default: {
-                    System.out.println("Тип персонажа может быть одним из: \"Читатель\", \"Коротышка\", \"Лунатик\".");
-                    return false;
+                    break;
                 }
             }
+            System.out.println(heroes);
         } catch (Exception e){
-            System.out.println("Ошибка ввода.");
+            System.out.println("Объект должен быть формата json.");
             return false;
         }
+        changeDate = new Date();
+        return true;
     }
 
     /**
