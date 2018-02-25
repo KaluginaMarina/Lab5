@@ -18,22 +18,31 @@ public class Main {
             if (command.equals("remove_last")){
                 cm.removeLast();
             } else if (command.equals("load")) {
-                cm.collectionCreater();
+                if(cm.collectionCreater()) {
+                    cm.load();
+                }
             } else if (command.equals("info")){
                 System.out.println("Тип коллекции: " + cm.getHeroes().getClass());
                 System.out.println("Количество элементов в коллекци: " + cm.getHeroes().size());
-                System.out.println("Время создания: " + cm.getCreateDate());
-                System.out.println("Время изменения: " + cm.getChangeDate());
+                System.out.println("Дата создания: " + cm.getCreateDate());
+                System.out.println("Дата изменения: " + cm.getChangeDate());
             } else if (command.equals("remove_greater")){
-                int arg = input.nextInt();
-            } else if (command.equals("add_if_max")){
-                int arg = input.nextInt();
-            } else if (command.equals("add_if_min")){
-                int arg = input.nextInt();
+                if(cm.remove_greater()){
+                    System.out.println("Выполнено.");
+                };
+            } else if (command.equals("add_if_max") || command.equals("add_if_min")){
+                if(cm.addIf(command)){
+                    System.out.println("Выполнено.");
+                }
             } else if (command.equals("add")){
-                cm.add();
+                if(cm.add()){
+                    System.out.println(cm.getHeroes().getLast() + " добавлен в коллекцию.");
+                };
             } else if (command.equals("print")) {
                 System.out.println(cm.getHeroes());
+            } else if (command.equals("sort")) {
+                cm.sort();
+                System.out.println("Выполнено.");
             } else if (command.equals("?") || command.equals("help")){
                 System.out.println(man);
             } else if (command.equals("exit")){

@@ -64,4 +64,16 @@ public abstract class Personage {
         System.out.print(name + " почувствовал, что ");
     }
 
+    /**
+     * Метод, сравнивает 2-х персонажей
+     * @param p - персонаж с которым сравниваем
+     * @return 0 - объекты равны, > 0 => (this > p), < 0 => (this < p)
+     */
+    public int compare(Personage p){
+        if (this.toString().compareTo(p.toString()) == 0){
+            return this.height - p.height;
+        } else {
+            return this.toString().compareTo(p.toString());
+        }
+    }
 }

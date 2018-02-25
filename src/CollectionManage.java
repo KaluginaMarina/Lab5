@@ -1,15 +1,14 @@
-import org.jcp.xml.dsig.internal.dom.DOMUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import static java.lang.Math.scalb;
 import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
@@ -53,8 +52,9 @@ public class CollectionManage {
 
     /**
      * Метод, создающий коллекцию Personage по данным из файла
+     * @return true - успех, false - инче
      */
-    public void collectionCreater(){
+    public boolean collectionCreater(){
         String heroesJson = read(fileName);
         try {
             JSONParser parser = new JSONParser();
@@ -80,8 +80,10 @@ public class CollectionManage {
                 }
             }
             changeDate = new Date();
+            return true;
         } catch (Exception e){
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -162,7 +164,7 @@ public class CollectionManage {
     /**
      * Метод для добавления элемента в коллекцию в интерактивном режиме
      */
-    public void add() {
+    public boolean add() {
         Scanner input = new Scanner(System.in);
         System.out.println("Введите тип персонажа: ");
         String type = input.next();
@@ -170,11 +172,10 @@ public class CollectionManage {
             switch (type) {
                 case "Читатель": {
                     System.out.println("Введите имя персонажа: ");
-                    String name = input.nextLine();
+                    String name = input.next();
                     heroes.add(new Reader(name));
-                    System.out.println(heroes.getLast() + " добавлен в коллекцию.");
                     changeDate = new Date();
-                    break;
+                    return true;
                 }
                 case "Коротышка": {
                 }
@@ -192,16 +193,114 @@ public class CollectionManage {
                     } else {
                         heroes.add(new Shorties(name, x, y, h));
                     }
-                    System.out.println(heroes.getLast() + " добавлен в коллекцию.");
                     changeDate = new Date();
-                    break;
+                    return true;
                 }
                 default: {
                     System.out.println("Тип персонажа может быть одним из: \"Читатель\", \"Коротышка\", \"Лунатик\".");
+                    return false;
                 }
             }
         } catch (Exception e){
             System.out.println("Ошибка ввода.");
+            return false;
         }
+    }
+
+    /**
+     * перечитать коллекцию из файла
+     * @return true - успех, false - иначе
+     */
+    public boolean load(){
+        while (!heroes.isEmpty()){
+            heroes.removeFirst();
+        }
+        if (collectionCreater()) {
+            System.out.println("Выполнено.");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * переписывает ArrayDegue в List
+     * @return list
+     */
+     private List<Personage> toList(){
+        List<Personage> list = new ArrayList<>();
+        while (!heroes.isEmpty()){
+            list.add(heroes.removeFirst());
+        }
+        toArrayDedue(list);
+        return list;
+    }
+
+    /**
+     * пеерписывает List в ArrayDeque
+     * @param list
+     */
+    private void toArrayDedue(List<Personage> list){
+        while (!heroes.isEmpty()){
+            heroes.removeFirst();
+        }
+        for (int i = 0; i < list.size(); ++i){
+            heroes.add(list.get(i));
+        }
+    }
+    /**
+     * Метод, сортирующий коллекцию по возрастанию
+     */
+    public void sort(){
+        List<Personage> list = toList();
+        Collections.sort(list, new Comparator<Personage>() {
+            public int compare(Personage p1, Personage p2) {
+                return p1.compare(p2);
+            }
+        });
+        toArrayDedue(list);
+        changeDate = new Date();
+    }
+
+    public boolean remove_greater(){
+        if (!add()) {
+            return false;
+        };
+        List<Personage> list = toList();
+        for (int i = 0; i < list.size() - 1; ++i){
+            if (list.get(i).compare(list.get(list.size() - 1)) > 0){
+                list.remove(i);
+            }
+        }
+        list.remove(list.get(list.size() - 1));
+        toArrayDedue(list);
+        changeDate = new Date();
+        return true;
+    }
+
+    /**
+     * add_if_max {element}: добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции
+     * add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции
+     * @param command "add_if_max" или "add_if_min"
+     */
+    public boolean addIf(String command){
+        if (!add()){
+            return false;
+        }
+        Personage p = heroes.removeLast();
+        List<Personage> list = toList();
+        Collections.sort(list, new Comparator<Personage>() {
+            public int compare(Personage p1, Personage p2) {
+                return p1.compare(p2);
+            }
+        });
+        if(command.equals("add_if_max")? (p.compare(list.get(list.size()-1)) <= 0) : (p.compare(list.get(0)) >= 0)){
+            System.out.println("Элемент не добавлен.");
+            return true;
+        }
+        heroes.add(p);
+        System.out.println("Элемент добавлен");
+        changeDate = new Date();
+        return true;
     }
 }
