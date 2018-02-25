@@ -1,7 +1,3 @@
-import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.internal.runtime.JSONFunctions;
-import org.json.simple.JSONValue;
-
 public class Moonlighter extends Personage {
 
     class unchException extends RuntimeException{

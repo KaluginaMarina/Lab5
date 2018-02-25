@@ -1,15 +1,10 @@
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
-
-import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
     private ArrayDeque<Personage> heroes = new ArrayDeque<>();
@@ -19,7 +14,7 @@ public class CollectionManage {
     private final String fileName = "materials\\Heroes.csv";
     private final String fileNameClosing = "materials\\HeroesClosing.csv";
 
-    public CollectionManage(){
+    CollectionManage(){
         createDate = new Date();
         changeDate = createDate;
     }
@@ -56,28 +51,30 @@ public class CollectionManage {
      */
     public boolean collectionCreater(){
         String heroesJson = read(fileName);
+        Scanner sc = new Scanner(heroesJson);
+        sc.useDelimiter("[,\n]");
+        sc.useLocale(Locale.ENGLISH);
         try {
-            JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(heroesJson);
-            for(int i = 0; i < json.size(); ++i){
-                JSONObject ob = (JSONObject) json.get(i);
-                switch ((String)ob.get("type")){
+            while(sc.hasNext()){
+                String type = sc.next();
+                switch (type){
                     case "Читатель": {
-                        heroes.add(new Reader((String)ob.get("name")));
+                        heroes.add(new Reader(sc.next()));
                         break;
                     }
                     case "Лунатик": {
-                        heroes.add(new Moonlighter((String)ob.get("name"), (double)ob.get("x"), (double)ob.get("y"), toIntExact((long)ob.get("height"))));
+                        heroes.add(new Moonlighter(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt()));
                         break;
                     }
                     case "Коротышка": {
-                        heroes.add(new Shorties((String)ob.get("name"), (double)ob.get("x"), (double)ob.get("y"), toIntExact((long)ob.get("height"))));
+                        heroes.add(new Shorties(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt()));
                         break;
                     }
                     default: {
                         break;
                     }
                 }
+                for(int i = 0; i < 3; ++i){ sc.next();}
             }
             changeDate = new Date();
             return true;
@@ -92,53 +89,34 @@ public class CollectionManage {
      */
     public void collectionSave(){
         try (FileWriter file = new FileWriter(fileNameClosing, false)){
-            file.write(toJson());
+            file.write(toSCV());
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    /**
-     * Метод, преобразующий текущую строку в строку, формата JSON
-     * @return String
-     */
-    public String toJson(){
-        ArrayList<Map<Object, Object>> a = new ArrayList<>();
+    private String toSCV(){
+        String res = "";
         while (!heroes.isEmpty()){
             switch (heroes.getFirst().type){
-                case "Читатель": {
-                    Map<Object, Object> map = new HashMap<>();
-                    map.put("type", heroes.getFirst().type);
-                    map.put("name", heroes.getFirst().name);
-                    map.put("height", heroes.getFirst().height);
-                    map.put("force", heroes.getFirst().force);
-                    map.put("mood", heroes.getFirst().mood.toString());
-                    a.add(map);
+                case "Читатель" : {
+                    res += heroes.getFirst().type + "," + heroes.getFirst().name + "," + heroes.getFirst().height  + "," + heroes.getFirst().force + "," + heroes.getFirst().mood + "\n";
                     break;
                 }
-                case "Коротышка" : {}
-                case "Лунатик" : {
-                    Map<Object, Object> map = new HashMap<>();
-                    map.put("type", heroes.getFirst().type);
-                    map.put("name", heroes.getFirst().name);
-                    map.put("x", heroes.getFirst().x);
-                    map.put("y", heroes.getFirst().y);
-                    map.put("height", heroes.getFirst().height);
-                    map.put("skillSwear", heroes.getFirst().skillSwear);
-                    map.put("force", heroes.getFirst().force);
-                    map.put("mood", heroes.getFirst().mood.toString());
-                    a.add(map);
+                case "Коротышка": { }
+                case "Лунатик": {
+
+                    res += heroes.getFirst().type + "," + heroes.getFirst().name + "," + heroes.getFirst().x + "," + heroes.getFirst().y + "," + heroes.getFirst().height + "," + heroes.getFirst().skillSwear + "," + heroes.getFirst().force + "," + heroes.getFirst().mood + "\n";
                     break;
                 }
-                default: {
+                default:{
                     break;
                 }
             }
             heroes.removeFirst();
         }
-        return JSONValue.toJSONString(a);
+        return res;
     }
-
 
     /**
      * Метод, для команды remove_last
@@ -184,7 +162,7 @@ public class CollectionManage {
                     String name = input.next();
                     System.out.println("Введите координату x: ");
                     double x = input.nextDouble();
-                    System.out.printf("Введите координату у: ");
+                    System.out.println("Введите координату у: ");
                     double y = input.nextDouble();
                     System.out.println("Укажите рост персонажа: ");
                     int h = input.nextInt();
@@ -215,12 +193,7 @@ public class CollectionManage {
         while (!heroes.isEmpty()){
             heroes.removeFirst();
         }
-        if (collectionCreater()) {
-            System.out.println("Выполнено.");
-            return true;
-        } else {
-            return false;
-        }
+        return (collectionCreater());
     }
 
     /**
@@ -262,6 +235,9 @@ public class CollectionManage {
         changeDate = new Date();
     }
 
+    /**
+     * удалить из коллекции все элементы, превышающие заданный
+     */
     public boolean remove_greater(){
         if (!add()) {
             return false;
@@ -284,6 +260,10 @@ public class CollectionManage {
      * @param command "add_if_max" или "add_if_min"
      */
     public boolean addIf(String command){
+        if (heroes.isEmpty()){
+            System.out.println("Коллекция пуста.");
+            return false;
+        }
         if (!add()){
             return false;
         }

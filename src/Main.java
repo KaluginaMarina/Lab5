@@ -18,8 +18,8 @@ public class Main {
             if (command.equals("remove_last")){
                 cm.removeLast();
             } else if (command.equals("load")) {
-                if(cm.collectionCreater()) {
-                    cm.load();
+                if(cm.load()){
+                    System.out.println("Выполнено.");
                 }
             } else if (command.equals("info")){
                 System.out.println("Тип коллекции: " + cm.getHeroes().getClass());
