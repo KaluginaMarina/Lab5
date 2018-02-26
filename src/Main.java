@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException,  IOException {
+    public static void main(String[] args){
 
         CollectionManage cm = new CollectionManage();
         cm.collectionCreater();
@@ -13,8 +13,8 @@ public class Main {
         while(true){
             System.out.println("Введите команду: ");
             Scanner input = new Scanner(System.in);
-            String command = input.next();
-
+            String command = input.nextLine();
+            command = command.replaceAll("\\s+", "");
             if (command.equals("remove_last")){
                 cm.removeLast();
             } else if (command.equals("load")) {
@@ -22,20 +22,17 @@ public class Main {
                     System.out.println("Выполнено.");
                 }
             } else if (command.equals("info")){
-                System.out.println("Тип коллекции: " + cm.getHeroes().getClass());
-                System.out.println("Количество элементов в коллекци: " + cm.getHeroes().size());
-                System.out.println("Дата создания: " + cm.getCreateDate());
-                System.out.println("Дата изменения: " + cm.getChangeDate());
-            } else if (command.equals("remove_greater")){
-                if(cm.remove_greater()){
+                cm.info();
+            } else if (command.length() > 13 && command.substring(0, 14).equals("remove_greater")){
+                if(cm.remove_greater(command.substring(14))){
                     System.out.println("Выполнено.");
                 };
-            } else if (command.equals("add_if_max") || command.equals("add_if_min")){
-                if(cm.addIf(command)){
+            } else if ((command.length() > 9 && command.substring(0, 10).equals("add_if_max")) || (command.length() > 9 && command.substring(0, 9).equals("add_if_min"))){
+                if(cm.addIf(command.substring(0, 10), command.substring(10))){
                     System.out.println("Выполнено.");
                 }
-            } else if (command.equals("add")){
-                if(cm.add()){
+            } else if (command.length() > 2 && command.substring(0,3).equals("add")){
+                if(cm.add(command.substring(3, command.length()))){
                     System.out.println(cm.getHeroes().getLast() + " добавлен в коллекцию.");
                 };
             } else if (command.equals("print")) {

@@ -1,49 +1,7 @@
 [ 
-	{
-		"type": "Лунатик",
-		"name": "Скуперфльд",
-		"x": 100.0,
-		"y": 100.0,
-		"height": 200,
-		"skillSwear": 10,
-		"force": 7,
-		"mood": "Mood.NORMAL"
-	},
-	{
-		"type": "Коротышка",
-		"name": "Миго",
-		"x": 0.0,
-		"y": 0.0,
-		"height": 100,
-		"skillSwear": 3,
-		"force": 5,
-		"mood": "Mood.NORMAL"
-	},
-	{
-		"type": "Коротышка",
-		"name": "Жулио",
-		"x": 10.0,
-		"y": 10.0,
-		"height": 110,
-		"skillSwear": 3,
-		"force": 5,
-		"mood": "Mood.NORMAL"
-	},
-	{
-		"type": "Коротышка",
-		"name": "Крабс",
-		"x": 20.0,
-		"y": 10.0,
-		"height": 115,
-		"skillSwear": 3,
-		"force": 5,
-		"mood": "Mood.NORMAL"
-	}
-	{
-		"type": "Читатель",
-		"name": "Читатель",
-		"height": 158,
-		"force" : 0,
-		"mood": "Mood.NORMAL"
-	}
+	{"type": "Лунатик","name": "Скуперфльд","x": 100.0,"y": 100.0,"height": 200,"skillSwear": 10,"force": 7,"mood": "Mood.NORMAL"},
+	{"type": "Коротышка","name": "Миго","x": 0.0,"y": 0.0,"height": 100,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
+	{"type": "Коротышка","name": "Жулио","x": 10.0,"y": 10.0,"height": 110,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
+	{"type": "Коротышка","name": "Крабс","x": 20.0,"y": 10.0,"height": 115,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
+	{"type": "Читатель","name": "Читатель","height": 158,"force" : 0,"mood": "Mood.NORMAL"}
 ]

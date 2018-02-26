@@ -1,6 +1,4 @@
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
@@ -16,8 +14,11 @@ public class CollectionManage {
     private final Date createDate;
     private Date changeDate;
 
-    private final String fileName = "materials\\Heroes.csv";
-    private final String fileNameClosing = "materials\\HeroesClosing.csv";
+    //private final String fileName = "materials\\Heroes.csv";
+    //private final String fileNameClosing = "materials\\HeroesClosing.csv";
+    private final String fileName = System.getenv("fileName");
+    private final String fileNameClosing = System.getenv("fileNameClose");
+
 
     CollectionManage(){
         createDate = new Date();
@@ -29,7 +30,7 @@ public class CollectionManage {
     }
 
     /**
-     * Метод для чтения текста из файла
+     * Метод для чтения текста из файла fileName
      * @return String heroesJson - строка-содержимое файла
      */
     public String read(String fileName){
@@ -51,7 +52,7 @@ public class CollectionManage {
     }
 
     /**
-     * Метод, создающий коллекцию Personage по данным из файла
+     * Метод, создающий коллекцию Personage по данным из файла fileName
      * @return true - успех, false - инче
      */
     public boolean collectionCreater(){
@@ -90,7 +91,7 @@ public class CollectionManage {
     }
 
     /**
-     * Метод, записывающий текущее состояние коллекции в файл
+     * Метод, записывающий текущее состояние коллекции в файл fileNameClose
      */
     public void collectionSave(){
         try (FileWriter file = new FileWriter(fileNameClosing, false)){
@@ -100,6 +101,10 @@ public class CollectionManage {
         }
     }
 
+    /**
+     * Метод, переаодящий строку в строку, формата scv
+     * @return String - строка, формата scv
+     */
     private String toSCV(){
         String res = "";
         while (!heroes.isEmpty()){
@@ -124,8 +129,7 @@ public class CollectionManage {
     }
 
     /**
-     * Метод, для команды remove_last
-     * удаляет последний элемент
+     * remove_last - удаляет последний элемент
      */
     public void removeLast(){
         if (heroes.isEmpty()){
@@ -144,10 +148,18 @@ public class CollectionManage {
         return changeDate;
     }
 
+    /**
+     * Считывает строку из консоли.
+     * Считывание происходит до тех пор, пока не встретится пустая строка
+     * @return String - считанная строка
+     */
     private String readPers(){
         Scanner input = new Scanner(System.in);
         String res = "";
         String str = input.nextLine();
+        if(str.equals("\\s+")){
+            str = input.nextLine();
+        }
        try{
            while (!(str).equals("")){
                res += str;
@@ -155,17 +167,22 @@ public class CollectionManage {
            }
        } catch (Exception e){
            e.printStackTrace();
-           return null;
+           return res;
        };
         return res;
     }
 
     /**
-     * Метод для добавления элемента в коллекцию в интерактивном режиме
+     * add {element} Метод для добавления элемента в коллекцию в интерактивном режиме
+     * Формат задания элемента {element}- json
+     * При вводе {element} другого формата или при вводе некорректного представления объекта - бросается исключение
+     * @param next - строка, которая подается пользователем после команды
+     * @return true - успешное выполнение команды, false - при возникновении ошибки
      */
-    public boolean add() {
+    public boolean add(String next) {
         try {
             String heroesJson = readPers();
+            heroesJson = next + heroesJson;
             if (heroesJson == null){
                 return false;
             };
@@ -187,10 +204,9 @@ public class CollectionManage {
                 default: {
                     break;
                 }
-            }
-            System.out.println(heroes);
+            };
         } catch (Exception e){
-            System.out.println("Объект должен быть формата json.");
+            System.out.println("Объект должен быть формата json или введено некорректное представление объекта.");
             return false;
         }
         changeDate = new Date();
@@ -198,8 +214,8 @@ public class CollectionManage {
     }
 
     /**
-     * перечитать коллекцию из файла
-     * @return true - успех, false - иначе
+     *  load - перечитать коллекцию из файла
+     * @return true - успешное выполнение команды, false - при возникновении ошибки
      */
     public boolean load(){
         while (!heroes.isEmpty()){
@@ -210,7 +226,7 @@ public class CollectionManage {
 
     /**
      * переписывает ArrayDegue в List
-     * @return list
+     * @return list - данная очередь в коллекцие list
      */
      private List<Personage> toList(){
         List<Personage> list = new ArrayList<>();
@@ -223,7 +239,7 @@ public class CollectionManage {
 
     /**
      * пеерписывает List в ArrayDeque
-     * @param list
+     * @param list - lfyysq List
      */
     private void toArrayDedue(List<Personage> list){
         while (!heroes.isEmpty()){
@@ -248,10 +264,14 @@ public class CollectionManage {
     }
 
     /**
-     * удалить из коллекции все элементы, превышающие заданный
+     * remove_greater {element}: удалить из коллекции все элементы, превышающие заданный
+     * Формат задания элемента {element}- json
+     * При вводе {element} другого формата или при вводе некорректного представления объекта - бросается исключение
+     * @param next -строка, которая подается пользователем после команды
+     * @return true - успешное выполнение команды, false - при возникновении ошибки
      */
-    public boolean remove_greater(){
-        if (!add()) {
+    public boolean remove_greater(String next){
+        if (!add(next)) {
             return false;
         };
         List<Personage> list = toList();
@@ -269,14 +289,17 @@ public class CollectionManage {
     /**
      * add_if_max {element}: добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции
      * add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции
+     * Формат задания элемента {element}- json
+     * При вводе {element} другого формата или при вводе некорректного представления объекта - бросается исключение
      * @param command "add_if_max" или "add_if_min"
+     * @return true - успешное выполнение команды, false - при возникновении ошибки
      */
-    public boolean addIf(String command){
+    public boolean addIf(String command, String next){
         if (heroes.isEmpty()){
             System.out.println("Коллекция пуста.");
             return false;
         }
-        if (!add()){
+        if (!add(next)){
             return false;
         }
         Personage p = heroes.removeLast();
@@ -294,5 +317,15 @@ public class CollectionManage {
         System.out.println("Элемент добавлен");
         changeDate = new Date();
         return true;
+    }
+
+    /**
+     * info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, дата изменения, количество элементов)
+     */
+    public void info(){
+        System.out.println("Тип коллекции: " + heroes.getClass());
+        System.out.println("Количество элементов в коллекци: " + heroes.size());
+        System.out.println("Дата создания: " + createDate);
+        System.out.println("Дата изменения: " + changeDate);
     }
 }
