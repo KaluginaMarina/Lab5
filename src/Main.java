@@ -1,18 +1,20 @@
 import java.io.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
 
         CollectionManage cm = new CollectionManage();
+        Runtime.getRuntime().addShutdownHook(new Thread(()->cm.collectionSave()));
         cm.collectionCreater();
 
-        String man = cm.read("materials\\man.txt");
+        String man = cm.read("materials/man.txt");
         System.out.println("help / ?: открыть справку");
 
         while(true){
             System.out.println("Введите команду: ");
-            Scanner input = new Scanner(System.in);
+            try{Scanner input = new Scanner(System.in);
             String command = input.nextLine();
             command = command.replaceAll("\\s+", "");
             if (command.equals("remove_last")){
@@ -46,7 +48,8 @@ public class Main {
                 break;
             } else {
                 System.out.println("Команда не найдена.\nhelp / ?: открыть справку");
-            }
+            } }
+            catch (NoSuchElementException e){break;};
 
         }
 

@@ -37,8 +37,8 @@ public class MessangeToInsects {
                 private ArrayList<String> ans = new ArrayList<>();
 
                 Answer() throws IOException {
-                    FileReader answer = new FileReader("materials\\answer.txt");
-                    FileReader toneFile = new FileReader("materials\\tone.txt");
+                    FileReader answer = new FileReader("materials/answer.txt");
+                    FileReader toneFile = new FileReader("materials/tone.txt");
                     Scanner scanAns = new Scanner(answer);
                     Scanner scanTone = new Scanner(toneFile);
                     while(scanAns.hasNextLine()) {

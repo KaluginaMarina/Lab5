@@ -14,10 +14,10 @@ public class CollectionManage {
     private final Date createDate;
     private Date changeDate;
 
-    //private final String fileName = "materials\\Heroes.csv";
-    //private final String fileNameClosing = "materials\\HeroesClosing.csv";
-    private final String fileName = System.getenv("fileName");
-    private final String fileNameClosing = System.getenv("fileNameClose");
+    //private final String fileName = "materials/Heroes.csv";
+    //private final String fileNameClosing = "materials/HeroesClosing.csv";
+    private final String fileName = System.getenv("FILENAME");
+    private final String fileNameClosing = System.getenv("FILENAMECLOSE");
 
 
     CollectionManage(){
@@ -46,7 +46,7 @@ public class CollectionManage {
                 heroesJson += line + "\n";
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Неправильный путь для FILENAME.");
         }
         return heroesJson;
     }
@@ -95,9 +95,10 @@ public class CollectionManage {
      */
     public void collectionSave(){
         try (FileWriter file = new FileWriter(fileNameClosing, false)){
-            file.write(toSCV());
+            String toCsv = toSCV();
+            file.write(toCsv);
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Неправильный путь для FILENAMECLOSE.");
         }
     }
 
@@ -107,6 +108,7 @@ public class CollectionManage {
      */
     private String toSCV(){
         String res = "";
+        ArrayDeque<Personage> p = heroes.clone();
         while (!heroes.isEmpty()){
             switch (heroes.getFirst().type){
                 case "Читатель" : {
@@ -125,6 +127,7 @@ public class CollectionManage {
             }
             heroes.removeFirst();
         }
+        heroes = p;
         return res;
     }
 
