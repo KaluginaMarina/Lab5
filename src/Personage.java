@@ -76,4 +76,29 @@ public abstract class Personage {
             return this.toString().compareTo(p.toString());
         }
     }
+
+    public boolean setMood(String s) {
+        switch (s){
+            case "NORMAL" : {
+                this.mood = Mood.NORMAL;
+                break;
+            }
+            case "FURY" : {
+                this.mood = Mood.FURY;
+                break;
+            }
+            case "HAPPY" : {
+                this.mood = Mood.HAPPY;
+                break;
+            }
+            case "SAD" : {
+                this.mood = Mood.SAD;
+                break;
+            }
+            default: {
+                return false;
+            }
+        }
+        return true;
+    }
 }

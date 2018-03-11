@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static java.lang.Math.negateExact;
 import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
@@ -65,27 +66,44 @@ public class CollectionManage {
                 String type = sc.next();
                 switch (type){
                     case "Читатель": {
-                        heroes.add(new Reader(sc.next()));
+                        Reader reader = new Reader(sc.next());
+                        reader.height = sc.nextInt();
+                        reader.force = sc.nextInt();
+                        if (!reader.setMood(sc.next())){
+                            throw new Exception();
+                        }
+                        heroes.add(reader);
                         break;
                     }
                     case "Лунатик": {
-                        heroes.add(new Moonlighter(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt()));
+                        Moonlighter moonlighter = new Moonlighter(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt());
+                        moonlighter.skillSwear = sc.nextInt();
+                        moonlighter.force = sc.nextInt();
+                        if (!moonlighter.setMood(sc.next())){
+                            throw new Exception();
+                        }
+                        heroes.add(moonlighter);
                         break;
                     }
                     case "Коротышка": {
-                        heroes.add(new Shorties(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt()));
+                        Shorties shorties = new Shorties(sc.next(), sc.nextDouble(), sc.nextDouble(), sc.nextInt());
+                        shorties.skillSwear = sc.nextInt();
+                        shorties.force = sc.nextInt();
+                        if (!shorties.setMood(sc.next())){
+                            throw new Exception();
+                        }
+                        heroes.add(shorties);
                         break;
                     }
                     default: {
-                        break;
+                        throw new Exception();
                     }
                 }
-                for(int i = 0; i < 3; ++i){ sc.next();}
             }
             changeDate = new Date();
             return true;
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Неправильное представление объекта.");
             return false;
         }
     }
