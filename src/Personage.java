@@ -79,18 +79,22 @@ public abstract class Personage {
 
     public boolean setMood(String s) {
         switch (s){
+            case "Mood.NORMAL" : {}
             case "NORMAL" : {
                 this.mood = Mood.NORMAL;
                 break;
             }
+            case "Mood.FURY" : {}
             case "FURY" : {
                 this.mood = Mood.FURY;
                 break;
             }
+            case "Mood.HAPPY" : {}
             case "HAPPY" : {
                 this.mood = Mood.HAPPY;
                 break;
             }
+            case "Mood.SAD" : {}
             case "SAD" : {
                 this.mood = Mood.SAD;
                 break;

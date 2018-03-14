@@ -5,9 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
-import static java.lang.Math.negateExact;
 import static java.lang.Math.toIntExact;
 
 public class CollectionManage {
@@ -112,11 +114,17 @@ public class CollectionManage {
      * Метод, записывающий текущее состояние коллекции в файл fileNameClose
      */
     public void collectionSave(){
+        System.out.println(fileNameClosing);
+        if (!Files.isWritable(Paths.get(fileNameClosing))){
+            System.out.println("Что-то с правами");
+            return;
+        }
+
         try (FileWriter file = new FileWriter(fileNameClosing, false)){
             String toCsv = toSCV();
             file.write(toCsv);
         } catch (Exception e){
-            System.out.println("Неправильный путь для FILENAMECLOSE.");
+            System.out.println("Неправильный путь для FILENAMECLOSE." + e.getMessage());
         }
     }
 
@@ -211,19 +219,40 @@ public class CollectionManage {
             JSONObject ob = (JSONObject) parser.parse(heroesJson);
             switch ((String)ob.get("type")) {
                 case "Читатель": {
-                    heroes.add(new Reader((String) ob.get("name")));
+                    Reader reader = new Reader((String) ob.get("name"));
+                    reader.height = toIntExact((long) ob.get("height"));
+                    reader.force = toIntExact((long) ob.get("force"));
+                    if(!reader.setMood((String) ob.get("mood"))){
+                        throw new Exception();
+                    }
+                    heroes.add(reader);
+                    //heroes.add(new Reader((String) ob.get("name")));
                     break;
                 }
                 case "Лунатик": {
-                    heroes.add(new Moonlighter((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
+                    Moonlighter moonlighter = new Moonlighter((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height")));
+                    moonlighter.skillSwear =  toIntExact((long) ob.get("skillSwear"));
+                    moonlighter.force =  toIntExact((long) ob.get("force"));
+                    if(!moonlighter.setMood((String) ob.get("mood"))){
+                        throw new Exception();
+                    }
+                    heroes.add(moonlighter);
+                    //heroes.add(new Moonlighter((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
                     break;
                 }
                 case "Коротышка": {
-                    heroes.add(new Shorties((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
+                    Shorties shorties = new Shorties((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height")));
+                    shorties.skillSwear =  toIntExact((long) ob.get("skillSwear"));
+                    shorties.force =  toIntExact((long) ob.get("force"));
+                    if(!shorties.setMood((String) ob.get("mood"))){
+                        throw new Exception();
+                    }
+                    heroes.add(shorties);
+                    //heroes.add(new Shorties((String) ob.get("name"), (double) ob.get("x"), (double) ob.get("y"), toIntExact((long) ob.get("height"))));
                     break;
                 }
                 default: {
-                    break;
+                    throw new Exception();
                 }
             };
         } catch (Exception e){
