@@ -3,5 +3,12 @@
 	{"type": "Коротышка","name": "Миго","x": 0.0,"y": 0.0,"height": 100,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
 	{"type": "Коротышка","name": "Жулио","x": 10.0,"y": 10.0,"height": 110,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
 	{"type": "Коротышка","name": "Крабс","x": 20.0,"y": 10.0,"height": 115,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"},
-	{"type": "Читатель","name": "Читатель","height": 158,"force" : 0,"mood": "Mood.NORMAL"}
+	{"type": "Читатель","name": "Марина","height": 158,"force" : 0,"mood": "Mood.HAPPY"}
 ]
+
+max       {"type": "Читатель","name": "Я","height": 158,"force" : 0,"mood": "Mood.HAPPY"}
+min		  {"type": "Коротышка","name": "Абв","x": 10.0,"y": 10.0,"height": 110,"skillSwear": 3,"force": 5,"mood": "Mood.NORMAL"}
+
+
+FILENAME=materials/Heroes.csv FILENAMECLOSE=materials/HeroesClosing.csv java18 -jar lab5.jar
+
